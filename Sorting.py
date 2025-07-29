@@ -37,7 +37,7 @@ if uploaded_file:
         st.success(f"✅ Loaded data from {len(all_sheets)} sheets: {list(all_sheets.keys())}")
 
         # === HIERARCHICAL FILTERS (Auto-adapt to data) ===
-        st.subheader("Apply Filters (Hierarchical)")
+        st.sidebar.header("Filters")
 
         filter_df = full_df.copy()
 
@@ -45,7 +45,7 @@ if uploaded_file:
            options = sorted(df[col].dropna().unique())
            if not options:
                return df
-           choice = st.selectbox(label, ["All"] + options)
+           choice = st.sidebar.selectbox(label, ["All"] + options)
            return df if choice == "All" else df[df[col] == choice]
 
         filter_df = cascading_filter(filter_df, "NameDimensiontype", "Select NameDimensiontype")
