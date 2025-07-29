@@ -41,7 +41,7 @@ if uploaded_file:
 
         filter_df = full_df.copy()
 
-       def cascading_filter(df, col, label):
+        def cascading_filter(df, col, label):
            options = sorted(df[col].dropna().unique())
            if not options:
                return df
