@@ -30,7 +30,9 @@ if uploaded_file:
     if missing_cols:
         st.error(f"Missing required columns: {missing_cols}")
     else:
-        full_df.dropna(subset=required_cols, inplace=True)
+        for col in required_cols:
+            if col not in full_df.columns:
+                full_df[col] = None 
 
         st.success(f"✅ Loaded data from {len(all_sheets)} sheets: {list(all_sheets.keys())}")
 
@@ -39,10 +41,12 @@ if uploaded_file:
 
         filter_df = full_df.copy()
 
-        def cascading_filter(df, col, label):
-            options = sorted(df[col].dropna().unique())
-            choice = st.selectbox(label, ["All"] + options)
-            return df if choice == "All" else df[df[col] == choice]
+       def cascading_filter(df, col, label):
+           options = sorted(df[col].dropna().unique())
+           if not options:
+               return df
+           choice = st.selectbox(label, ["All"] + options)
+           return df if choice == "All" else df[df[col] == choice]
 
         filter_df = cascading_filter(filter_df, "NameDimensiontype", "Select NameDimensiontype")
         filter_df = cascading_filter(filter_df, "NameReportingstructuregroup2", "Select NameReportingstructuregroup2")
